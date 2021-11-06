@@ -1,0 +1,126 @@
+#!/bin/bash
+
+DirAtual="${PWD}"
+
+##toolxmenu##
+##################
+##START toolxmenu##
+toolxmenu(){
+   PS3="└──> ToolXMenu : "
+   options=("Preparar o S.O. e instalar as ferramentas." "Configurar o Proton VPN." "Iniciar o Proton VPN." "Criar arquivos de START e STOP." "Criação da conta (Instruções)." "SAIR")
+   select opt in "${options[@]}"
+   do
+      case $opt in
+         "Preparar o S.O. e instalar as ferramentas.")
+            INSTALLTOOLS
+            ;;
+         "Configurar o Proton VPN.")
+            CONFIG
+            ;;
+         "Iniciar o Proton VPN.")
+            INICIAR
+            ;;
+         "Criar arquivos de START e STOP.")
+            CRIARARQ
+            ;;
+         "Criação da conta (Instruções).")
+            INSTRU
+            ;;
+         "SAIR")
+            break
+            ;;
+         *) echo "A opção ($REPLY) não existe.";;
+      esac
+   done
+}
+##END toolxmenu##
+################
+##/toolxmenu##
+
+INSTALLTOOLS()
+{
+echo -e "\033[1;31m[✔] Fazendo o UpDate - Sem instalar nada.\033[0m \033[1;31m \033[0m"
+apt update
+
+echo -e "\033[1;31m[✔] Instalando componentes.\033[0m \033[1;31m \033[0m"
+sudo apt install openvpn dialog python3-pip python3-setuptools -y
+
+echo -e "\033[1;31m[✔] Instalando o Proton VPN.\033[0m \033[1;31m \033[0m"
+sudo pip3 install protonvpn-cli
+}
+
+CONFIG()
+{
+echo -e "\033[1;31m[✔] Informe usuario (Nome de usuário OpenVPN / IKEv2), senha (Senha OpenVPN / IKEv2
+).  \033[0m \033[1;31m \033[0m"
+sudo protonvpn init
+}
+
+INICIAR()
+{
+echo -e "\033[1;31m[✔] Iniciando o Proton VPN e configurando a VPN. \033[0m \033[1;31m \033[0m"
+sudo protonvpn c
+}
+
+CRIARARQ()
+{
+echo -e "\033[1;31m[✔] Criando arquivos de START e STOP. \033[0m \033[1;31m \033[0m"
+cat >'/bin/vpnon' <<EOT
+sudo protonvpn c
+EOT
+
+cat >'/bin/vpnoff' <<EOT
+sudo protonvpn d
+EOT
+
+sudo chmod 777 /bin/vpnon
+sudo chmod 777 /bin/vpnoff
+echo ""
+echo -e "\033[1;31m[✔] Comandos para 'iniciar' e 'parar' o serviço: \033[0m \033[1;31m \033[0m"
+echo -e "\033[1;31m[✔] Para 'Start', digite: vpnon \033[0m \033[1;31m \033[0m"
+echo -e "\033[1;31m[✔] Para 'Stop', digite: vpnoff \033[0m \033[1;31m \033[0m"
+}
+
+INSTRU()
+{
+echo -e "\033[1;31m[✔] 1 - Acessa o site: https://protonvpn.com/ \033[0m \033[1;31m \033[0m"
+echo -e "\033[1;31m[✔] 1.1 - Clique em 'SIGNUP'. \033[0m \033[1;31m \033[0m"
+echo -e "\033[1;31m[✔] 1.2 - Clique em 'GetFree'. \033[0m \033[1;31m \033[0m"
+echo -e "\033[1;31m[✔] 1.3 - Crie a sua conta gratuita. \033[0m \033[1;31m \033[0m"
+echo -e "\033[1;31m[✔] 2 - Acesse sua conta: https://account.protonvpn.com/dashboard \033[0m \033[1;31m \033[0m"
+echo -e "\033[1;31m[✔] 2.1 - Vá até o local: Nome de usuário OpenVPN / IKEv2 \033[0m \033[1;31m \033[0m"
+echo -e "\033[1;31m[✔] 2.2 - Informe 'usuário e senha' na tela de configurações do Proton VPN no terminal. \033[0m \033[1;31m \033[0m"
+}
+
+##Bem Vindo##
+#########################
+##Inicio Bem Vindo##
+clear && echo ""
+echo "'########::'#######:::'#######::'##:::::::'##::::'##:::::::::::::::::::'###::::'##::::'##:'########:::'#######::"
+echo "... ##..::'##.... ##:'##.... ##: ##:::::::. ##::'##:::::::::::::::::::'## ##:::. ##::'##:: ##.... ##:'##.... ##:"
+echo "::: ##:::: ##:::: ##: ##:::: ##: ##::::::::. ##'##:::::::::::::::::::'##:. ##:::. ##'##::: ##:::: ##: ##::::..::"
+echo "::: ##:::: ##:::: ##: ##:::: ##: ##:::::::::. ###:::::::'#######::::'##:::. ##:::. ###:::: ########:: ########::"
+echo "::: ##:::: ##:::: ##: ##:::: ##: ##::::::::: ## ##::::::........:::: #########::: ## ##::: ##.. ##::: ##.... ##:"
+echo "::: ##:::: ##:::: ##: ##:::: ##: ##:::::::: ##:. ##::::::::::::::::: ##.... ##:: ##:. ##:: ##::. ##:: ##:::: ##:"
+echo "::: ##::::. #######::. #######:: ########: ##:::. ##:::::::::::::::: ##:::: ##: ##:::. ##: ##:::. ##:. #######::"
+echo ":::..::::::.......::::.......:::........::..:::::..:::::::::::::::::..:::::..::..:::::..::..:::::..:::.......:::"
+echo ""
+echo -e "\033[1;32mSeja bem vindo ao ToolXMenu!\033[0m"
+echo -e "\033[1;32mLinkedin:\033[0m https://www.linkedin.com/in/thalles-canela/"
+echo -e "\033[1;32mYouTube: \033[0m https://www.youtube.com/c/aXR6CyberSecurity"
+echo -e "\033[1;32mFacebook:\033[0m https://www.facebook.com/axr6PenTest"
+echo -e "\033[1;32mGithub:  \033[0m https://github.com/ThallesCanela"
+echo -e "\033[1;32mGithub:  \033[0m https://github.com/aXR6"
+echo -e "\033[1;32mTwitter: \033[0m https://twitter.com/Axr6S"
+echo -e "\033[1;32mPadim:   \033[0m https://www.padrim.com.br/aXR6CyberSecurity"
+echo ""
+echo -e "\033[1;32mDiretorio atual: $DirAtual\033[0m \033[1;31m \033[0m"
+echo ""
+echo -e "\033[1;31m:=> Não seja sujo! Se achou de graça, distribua de graça repassando os devidos créditos! \033[0m"
+echo -e "\033[1;31m:=> Script ToolXMenu, desenvolvido por mim (Thalles Canela - ToolX), para organização das ferramentas encontradas em: \033[0m"
+echo -e "\033[1;31m:=> https://github.com/aXR6 \033[0m"
+echo ""
+toolxmenu
+##Fim Bem Vindo##
+#######################
+##/Bem Vindo##
